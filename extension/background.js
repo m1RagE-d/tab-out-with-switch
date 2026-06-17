@@ -62,6 +62,22 @@ async function updateBadge() {
 
 // ─── Event listeners ──────────────────────────────────────────────────────────
 
+// Open Tab Out when the toolbar icon is clicked. If a Tab Out page is already
+// open, focus it instead of creating another dashboard tab.
+chrome.action.onClicked.addListener(async () => {
+  const dashboardUrl = chrome.runtime.getURL('index.html');
+  const dashboardTabs = await chrome.tabs.query({ url: dashboardUrl });
+
+  if (dashboardTabs.length > 0) {
+    const [dashboardTab] = dashboardTabs;
+    await chrome.tabs.update(dashboardTab.id, { active: true });
+    await chrome.windows.update(dashboardTab.windowId, { focused: true });
+    return;
+  }
+
+  await chrome.tabs.create({ url: dashboardUrl });
+});
+
 // Update badge when the extension is first installed
 chrome.runtime.onInstalled.addListener(() => {
   updateBadge();

@@ -1,8 +1,8 @@
 /* ================================================================
    Tab Out — Dashboard App (Pure Extension Edition)
 
-   This file is the brain of the dashboard. Now that the dashboard
-   IS the extension page (not inside an iframe), it can call
+   This file is the brain of the dashboard. Since the dashboard
+   is an extension page (not inside an iframe), it can call
    chrome.tabs and chrome.storage directly — no postMessage bridge needed.
 
    What this file does:
@@ -19,7 +19,7 @@
 /* ----------------------------------------------------------------
    CHROME TABS — Direct API Access
 
-   Since this page IS the extension's new tab page, it has full
+   Since this page is the extension's dashboard page, it has full
    access to chrome.tabs and chrome.storage. No middleman needed.
    ---------------------------------------------------------------- */
 
@@ -35,8 +35,7 @@ let openTabs = [];
 async function fetchOpenTabs() {
   try {
     const extensionId = chrome.runtime.id;
-    // The new URL for this page is now index.html (not newtab.html)
-    const newtabUrl = `chrome-extension://${extensionId}/index.html`;
+    const dashboardUrl = `chrome-extension://${extensionId}/index.html`;
 
     const tabs = await chrome.tabs.query({});
     openTabs = tabs.map(t => ({
@@ -45,8 +44,8 @@ async function fetchOpenTabs() {
       title:    t.title,
       windowId: t.windowId,
       active:   t.active,
-      // Flag Tab Out's own pages so we can detect duplicate new tabs
-      isTabOut: t.url === newtabUrl || t.url === 'chrome://newtab/',
+      // Flag Tab Out's own pages so we can detect duplicate dashboards
+      isTabOut: t.url === dashboardUrl,
     }));
   } catch {
     // chrome.tabs API unavailable (shouldn't happen in an extension page)
@@ -172,16 +171,16 @@ async function closeDuplicateTabs(urls, keepOne = true) {
 /**
  * closeTabOutDupes()
  *
- * Closes all duplicate Tab Out new-tab pages except the current one.
+ * Closes all duplicate Tab Out dashboard pages except the current one.
  */
 async function closeTabOutDupes() {
   const extensionId = chrome.runtime.id;
-  const newtabUrl = `chrome-extension://${extensionId}/index.html`;
+  const dashboardUrl = `chrome-extension://${extensionId}/index.html`;
 
   const allTabs = await chrome.tabs.query({});
   const currentWindow = await chrome.windows.getCurrent();
   const tabOutTabs = allTabs.filter(t =>
-    t.url === newtabUrl || t.url === 'chrome://newtab/'
+    t.url === dashboardUrl
   );
 
   if (tabOutTabs.length <= 1) return;
