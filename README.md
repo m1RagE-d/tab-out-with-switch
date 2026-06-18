@@ -2,90 +2,123 @@
 
 **Keep tabs on your tabs.**
 
-Tab Out is a Chrome extension that replaces your new tab page with a dashboard of everything you have open. Tabs are grouped by domain, with homepages (Gmail, X, LinkedIn, etc.) pulled into their own group. Close tabs with a satisfying swoosh + confetti.
+Tab Out is a local-first Chrome extension that opens a clean dashboard of everything you have open, grouped by domain. Click the extension icon whenever you want to tidy up, jump across windows, close duplicates, or save tabs for later.
 
-No server. No account. No external API calls. Just a Chrome extension.
+By default, Tab Out is **click to open**. If you want it to appear every time you open a new tab, turn on **Open Tab Out in new tab** from the dashboard.
 
----
-
-## Install with a coding agent
-
-Send your coding agent (Claude Code, Codex, etc.) this repo and say **"install this"**:
-
-```
-https://github.com/zarazhangrui/tab-out
-```
-
-The agent will walk you through it. Takes about 1 minute.
+No server. No account. No external API calls.
 
 ---
 
 ## Features
 
-- **See all your tabs at a glance** on a clean grid, grouped by domain
+- **Click the toolbar icon to open Tab Out** without replacing your normal new tab page
+- **Optional new-tab mode** from the dashboard settings toggle
+- **See all your open tabs at a glance** on a clean grid, grouped by domain
 - **Homepages group** pulls Gmail inbox, X home, YouTube, LinkedIn, GitHub homepages into one card
 - **Close tabs with style** with swoosh sound + confetti burst
-- **Duplicate detection** flags when you have the same page open twice, with one-click cleanup
-- **Click any tab to jump to it** across windows, no new tab opened
+- **Duplicate detection** flags repeated pages, with one-click cleanup
+- **Click any tab title to jump to it** across Chrome windows
 - **Save for later** bookmark tabs to a checklist before closing them
-- **Localhost grouping** shows port numbers next to each tab so you can tell your vibe coding projects apart
+- **Localhost grouping** shows port numbers next to local development tabs
 - **Expandable groups** show the first 8 tabs with a clickable "+N more"
-- **100% local** your data never leaves your machine
-- **Pure Chrome extension** no server, no Node.js, no npm, no setup beyond loading the extension
+- **100% local** saved tabs and settings stay in `chrome.storage.local`
 
 ---
 
-## Manual Setup
+## Install
 
-**1. Clone the repo**
+1. Clone this repo:
 
 ```bash
 git clone https://github.com/zarazhangrui/tab-out.git
+cd tab-out
 ```
 
-**2. Load the Chrome extension**
+2. Open Chrome extensions:
 
-1. Open Chrome and go to `chrome://extensions`
-2. Enable **Developer mode** (top-right toggle)
-3. Click **Load unpacked**
-4. Navigate to the `extension/` folder inside the cloned repo and select it
+```text
+chrome://extensions
+```
 
-**3. Open a new tab**
+3. Turn on **Developer mode** in the top-right corner.
 
-You'll see Tab Out.
+4. Click **Load unpacked**.
+
+5. Select the `extension/` folder inside this repo.
+
+6. Pin Tab Out to your Chrome toolbar, then click the icon to open the dashboard.
 
 ---
 
-## How it works
+## Optional: Open Tab Out In Every New Tab
 
-```
-You open a new tab
-  -> Tab Out shows your open tabs grouped by domain
-  -> Homepages (Gmail, X, etc.) get their own group at the top
-  -> Click any tab title to jump to it
-  -> Close groups you're done with (swoosh + confetti)
-  -> Save tabs for later before closing them
-```
+Tab Out no longer takes over new tabs by default. To enable that behavior:
 
-Everything runs inside the Chrome extension. No external server, no API calls, no data sent anywhere. Saved tabs are stored in `chrome.storage.local`.
+1. Click the Tab Out toolbar icon.
+2. In the dashboard header, turn on **Open Tab Out in new tab**.
+3. Open a new tab.
+
+Turn the same switch off whenever you want Chrome's normal new tab behavior back.
 
 ---
 
-## Tech stack
+## How It Works
+
+```text
+Click the Tab Out icon
+  -> Tab Out opens a dashboard of your current tabs
+  -> Tabs are grouped by domain
+  -> Homepages are grouped separately
+  -> Duplicate tabs are flagged
+  -> Click a tab title to jump to it
+  -> Save tabs for later or close them with one click
+```
+
+When new-tab mode is enabled, the extension watches for Chrome's blank new tab page and redirects that tab to Tab Out. The setting is stored locally and can be changed from the dashboard at any time.
+
+---
+
+## Privacy
+
+Tab Out runs entirely inside Chrome.
+
+- No server
+- No account
+- No analytics
+- No external API calls
+- Saved tabs are stored in `chrome.storage.local`
+- Settings are stored in `chrome.storage.local`
+
+Favicons are requested from Google's favicon service so tab rows can show familiar site icons.
+
+---
+
+## Update
+
+```bash
+cd tab-out
+git pull
+```
+
+Then go to `chrome://extensions` and click **Reload** on Tab Out.
+
+---
+
+## Tech Stack
 
 | What | How |
-|------|-----|
+| --- | --- |
 | Extension | Chrome Manifest V3 |
-| Storage | chrome.storage.local |
-| Sound | Web Audio API (synthesized, no files) |
-| Animations | CSS transitions + JS confetti particles |
+| Dashboard | Plain HTML, CSS, JavaScript |
+| Storage | `chrome.storage.local` |
+| Sound | Web Audio API |
+| Animations | CSS transitions + JavaScript confetti |
 
 ---
 
 ## License
 
 MIT
-
----
 
 Built by [Zara](https://x.com/zarazhangrui)

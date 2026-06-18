@@ -25,6 +25,32 @@
 
 // All open tabs — populated by fetchOpenTabs()
 let openTabs = [];
+const SETTINGS_KEY = 'tabOutSettings';
+const DEFAULT_SETTINGS = {
+  openDashboardInNewTabs: false,
+};
+
+async function getSettings() {
+  const stored = await chrome.storage.local.get(SETTINGS_KEY);
+  return { ...DEFAULT_SETTINGS, ...(stored[SETTINGS_KEY] || {}) };
+}
+
+async function saveSettings(settings) {
+  const current = await getSettings();
+  const next = { ...current, ...settings };
+  await chrome.storage.local.set({ [SETTINGS_KEY]: next });
+  return next;
+}
+
+async function renderSettingsToggle() {
+  const toggle = document.getElementById('newTabModeToggle');
+  const status = document.getElementById('newTabModeStatus');
+  if (!toggle || !status) return;
+
+  const settings = await getSettings();
+  toggle.checked = settings.openDashboardInNewTabs;
+  status.textContent = settings.openDashboardInNewTabs ? 'On' : 'Off';
+}
 
 /**
  * fetchOpenTabs()
@@ -1024,6 +1050,7 @@ async function renderStaticDashboard() {
   const dateEl     = document.getElementById('dateDisplay');
   if (greetingEl) greetingEl.textContent = getGreeting();
   if (dateEl)     dateEl.textContent     = getDateDisplay();
+  await renderSettingsToggle();
 
   // --- Fetch tabs ---
   await fetchOpenTabs();
@@ -1446,6 +1473,14 @@ document.addEventListener('click', (e) => {
 
 // ---- Archive search — filter archived items as user types ----
 document.addEventListener('input', async (e) => {
+  if (e.target.id === 'newTabModeToggle') {
+    const enabled = e.target.checked;
+    await saveSettings({ openDashboardInNewTabs: enabled });
+    await renderSettingsToggle();
+    showToast(enabled ? 'Tab Out will open in new tabs' : 'New tabs stay as Chrome default');
+    return;
+  }
+
   if (e.target.id !== 'archiveSearch') return;
 
   const q = e.target.value.trim().toLowerCase();
