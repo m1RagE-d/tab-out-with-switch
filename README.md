@@ -4,9 +4,15 @@
 
 Tab Out is a local-first Chrome extension that opens a clean dashboard of everything you have open, grouped by domain. Click the extension icon whenever you want to tidy up, jump across windows, close duplicates, or save tabs for later.
 
-By default, Tab Out is **click to open**. If you want it to appear every time you open a new tab, turn on **Open Tab Out in new tab** from the dashboard.
+By default, Tab Out is **click to open**. If you want it to appear every time you open a new tab, **turn on Open Tab Out in new tab** from the dashboard. If you want it to appear after clicking the extension icon in the toolbar, **turn off Open Tab Out in new tab** from the dashboard.
+
+<img width="344" height="148" alt="Screenshot 2026-07-01 at 16 50 54" src="https://github.com/user-attachments/assets/4d1b104e-c699-48cd-bdac-8b3399b6a318" />
+<img width="120" height="61" alt="Screenshot 2026-07-01 at 16 51 57" src="https://github.com/user-attachments/assets/849f7054-5878-4c9a-8d23-3a0f842f8593" />
+
+
 
 No server. No account. No external API calls.
+
 
 ---
 
